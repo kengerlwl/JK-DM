@@ -1,0 +1,21 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>CF取访问</title>
+    <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.get("http://192.168.1.102:8000/va", function(data) {
+                console.log(data.data)
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h2>信息如下：</h2>
+    <div id="result"></div>
+</body>
+
+</html>

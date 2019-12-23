@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jQuery.danmu.js jQuery弹幕插件</title>
+  <!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css"> -->
+  <!-- Tocas UI：CSS 與元件 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css">
+  <!-- Custom styles for our template -->
+  <link rel="stylesheet" href="assets/css/bootstrap-theme.css" media="screen">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/js/highlight/styles/monokai.css">
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+	<script src="assets/js/html5shiv.js"></script>
+	<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
+
+  <style>
+    body {
+      font-family: "Microsoft YaHei" ! important;
+      font-color: #222;
+    }
+
+    pre {
+      line-height: 2em;
+      font-family: "Microsoft YaHei" ! important;
+    }
+
+    h4 {
+      line-height: 2em;
+    }
+
+    #danmuarea {
+      position: relative;
+      background: #222;
+      width: 800px;
+      height: 445px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .ctr {
+      font-size: 1em;
+      line-height: 2em;
+    }
+  </style>
+</head>
+
+<body class="home">
+
+
+  <!-- Intro -->
+  <div class="container text-center"> <br>
+
+    <div id="danmuarea" class="text-center">
+      <div id="danmu">
+        <video id="video" class="video-js vjs-default-skin" controls preload="none" max-width="90rem" height="100%%"
+          controls="controls" poster="./img/video.jpg" data-setup="{}" src=''>
+          <source type='video/mp4'>
+        </video>
+      </div>
+    </div>
+    <div class="text-center ctr"> <br>
+      <!-- <button type="button" onclick="resumer() ">弹幕开始/继续</button> -->
+      <button class="ts positive button" onclick="resumer()">弹幕开始/继续</button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button class="ts negative button" onclick="pauser()">弹幕暂停</button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <!-- 显示弹幕:
+      <input type='checkbox' checked='checked' id='ishide' value='is' onchange='changehide()'> -->
+      <div class="ts checkbox">
+        <input id="ishide" type="checkbox" checked='checked' value='is' onchange='changehide()'>
+        <label for="ishide">显示弹幕</label>
+      </div>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <!-- <input type="range" name="op" id="op" onchange="op()" value="100"> -->
+      <br>
+      <div>
+        <div class="ts slider">
+        <div class="ts basic right pointing label">0%</div>
+        <input type="range" name="op" id="op" onchange="op()" value="100">
+        <div class="ts basic left pointing label">100%</div>
+      </div>
+      </div>
+      <label>弹幕透明度</label>
+      
+      <br>
+      当前弹幕运行时间(分秒)：<span id="time"></span>&nbsp;&nbsp;
+      设置当前弹幕时间(分秒)：
+      <!-- <input type="text" id="set_time" max=20 /> -->
+      <div class="ts basic input">
+        <input type="text" id="set_time" max=20 placeholder="input the time">
+      </div>
+      <button class="ts basic button" onclick="settime()">设置</button>
+      <br>
+      <div style="justify-content: space-between;">
+        <!-- 发弹幕: -->
+        <select class="ts basic primary dropdown" name="color" id="color">
+          <option value="white">白色</option>
+          <option value="red">红色</option>
+          <option value="green">绿色</option>
+          <option value="blue">蓝色</option>
+          <option value="yellow">黄色</option>
+        </select>
+        <!-- <select name="color" id="color">
+        <option value="white">白色</option>
+        <option value="red">红色</option>
+        <option value="green">绿色</option>
+        <option value="blue">蓝色</option>
+        <option value="yellow">黄色</option>
+      </select> -->
+
+        <!-- <select name="size" id="text_size">
+        <option value="1">大文字</option>
+        <option value="0">小文字</option>
+      </select> -->
+        <select class="ts basic info dropdown" name="size" id="text_size">
+          <option value="1">大文字</option>
+          <option value="0">小文字</option>
+        </select>
+        <!-- <select name="position" id="position">
+        <option value="0">滚动</option>
+        <option value="1">顶端</option>
+        <option value="2">底端</option>
+      </select> -->
+
+        <select class="ts basic positive dropdown" name="position" id="position">
+          <option value="0">滚动</option>
+          <option value="1">顶端</option>
+          <option value="2">底端</option>
+        </select>
+        <!-- <input type="textarea" id="text" max=300 /> -->
+        <div class="ts input">
+          <input type="text" id="text" max=300 placeholder="弹幕">
+        </div>
+        <!-- <button type="button" onclick="send()">发送</button> -->
+        <button class="ts positive basic button" onclick="send()">发送</button>
+      </div>
+
+    </div>
+
+    <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+
+    <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <!-- Tocas JS：模塊與 JavaScript 函式 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/headroom.min.js"></script>
+    <script src="assets/js/jQuery.headroom.min.js"></script>
+    <script src="assets/js/template.js"></script>
+    <script src="assets/js/highlight/highlight.pack.js"></script>
+    <script src="assets/js/jquery.danmu.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+
+      $(document).ready(function () {
+        $.get("http://127.0.0.1:8000/load", function (data) {
+          console.log(data);
+
+          $('#video').attr("src", data);
+        });
+      });
+
+
+      (function () {
+        $("#danmu").danmu({
+          // left:$("#danmuarea").offset().left,
+          // top:$("#danmuarea").offset().top,
+          // height: 445,
+          //    width: 800,
+          left: 0,
+          top: 0,
+          height: "100%",
+          width: "100%",
+          speed: 30000,
+          opacity: 1,
+          font_size_small: 16,
+          font_size_big: 24,
+          top_botton_danmu_time: 6000
+        }
+        );
+      })(jQuery);
+
+
+      query();
+      timedCount();
+
+
+      var first = true;
+
+      function timedCount() {
+        $("#time").text($('#danmu').data("nowtime"));
+
+        t = setTimeout("timedCount()", 50)
+
+      }
+
+
+
+      function starter() {
+
+        $('#danmu').danmu('danmu_start');
+
+      }
+      function pauser() {
+
+        $('#danmu').danmu('danmu_pause');
+      }
+      function resumer() {
+
+        $('#danmu').danmu('danmu_resume');
+      }
+      function stoper() {
+        $('#danmu').danmu('danmu_stop');
+      }
+
+      function getime() {
+        alert($('#danmu').data("nowtime"));
+      }
+
+      function getpaused() {
+        alert($('#danmu').data("paused"));
+      }
+
+      function add() {
+        console.log('add danmu');
+        var newd =
+          { "text": "new2", "color": "green", "size": "1", "position": "0", "time": 60 };
+
+        $('#danmu').danmu("add_danmu", newd);
+      }
+      function insert() {
+        var newd = { "text": "new2", "color": "green", "size": "1", "position": "0", "time": 50 };
+        str_newd = JSON.stringify(newd);
+        $.post("stone.php", { danmu: str_newd }, function (data, status) { alert(data) });
+      }
+      function query() {
+        $.get("query.php", function (data, status) {
+          var danmu_from_sql = eval(data);
+          for (var i = 0; i < danmu_from_sql.length; i++) {
+            var danmu_ls = eval('(' + danmu_from_sql[i] + ')');
+            $('#danmu').danmu("add_danmu", danmu_ls);
+          }
+        });
+      }
+
+      function send() {
+        var text = document.getElementById('text').value;
+        var color = document.getElementById('color').value;
+        var position = document.getElementById('position').value;
+        var time = $('#danmu').data("nowtime") + 5;
+        var size = document.getElementById('text_size').value;
+        var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
+        $.post("stone.php", { danmu: text_obj });
+        var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
+        var new_obj = eval('(' + text_obj + ')');
+        $('#danmu').danmu("add_danmu", new_obj);
+        document.getElementById('text').value = '';
+      }
+
+      function op() {
+        var op = document.getElementById('op').value;
+        $('#danmu').data("opacity", op);
+      }
+
+
+      function changehide() {
+        var op = document.getElementById('op').value;
+        op = op / 100;
+        if (document.getElementById("ishide").checked) {
+          jQuery('#danmu').data("opacity", op);
+          jQuery(".flying").css({
+            "opacity": op
+          });
+        } else {
+          jQuery('#danmu').data("opacity", 0);
+          jQuery(".flying").css({
+            "opacity": 0
+          });
+        }
+      }
+
+
+      function settime() {
+        var t = document.getElementById("set_time").value;
+        t = parseInt(t)
+        console.log(t)
+        $('#danmu').data("nowtime", t);
+      }
+    </script>
+</body>
+
+</html>
