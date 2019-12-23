@@ -38,7 +38,7 @@ npm run dev #開啟端口測試
 ### 后端web使用说明
 
 ```zsh
- python manage.py runserver 0.0.0.0:8000  #外机访问命令，不需要此命令的時候可以用自己的辦法。
+ python manage.py runserver 0.0.0.0:8000  #外机访问命令，不需要此命令的時候可以用自己的办法。
 ```
 
 - 关于下载本项目后 后端的本地化，只有一个：将 `/home/lwl/Study/code/Python/django/mysite-master` 转变为你相应的项目地址，
