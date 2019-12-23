@@ -16,4 +16,3 @@
 =======
 # jk_DM-
 一个用python django 和scrapy写的动漫网站后端
->>>>>>> 1bacdbb52d9c67b9695ef482d4ff158f81ef4551
